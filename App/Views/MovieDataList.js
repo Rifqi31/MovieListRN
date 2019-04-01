@@ -76,14 +76,15 @@ class MovieDataList extends React.PureComponent {
         });
 	}
 
-
-	// _renderItemMovie = (movieItem) => {
-	// 	<ListItem thumbnail>
-	// 		<Left>
-	// 			<Thumbnail square source = {{ uri : movieItem.poster_path }} />
-	// 		</Left>
-	// 	</ListItem>
-	// }
+	// infinite scroll
+	handleLoadMore = () => {
+		this.setState({
+			page: this.state.page + 1,
+            loading: true
+		}, () => {
+            this.makeRemoteRequest();
+        });
+	}
 
 	render(){
 		return(
@@ -103,7 +104,7 @@ class MovieDataList extends React.PureComponent {
 						<List
 							dataArray = { this.state.data }
 							renderRow = { movieItem => 
-								<ListItem>
+								<ListItem Thumbnail>
 									<Left>
 										{/* <Text>{ movieItem.poster_path }</Text> */}
 										<Thumbnail square large source= {{ uri:"https://image.tmdb.org/t/p/w500" + movieItem.poster_path }}/>
@@ -118,6 +119,10 @@ class MovieDataList extends React.PureComponent {
 											<Icon name="arrow-forward" style={{ color: "#999" }}/>
 										</Button>
 								</ListItem> }
+
+								 // infinite scroll
+								 onEndReached={this.handleLoadMore}
+								 onEndReachedThreshold={0.5}
 						 />
 					</Content>
 			</Container>
