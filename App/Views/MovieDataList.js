@@ -121,8 +121,10 @@ class MovieDataList extends React.PureComponent {
 								</ListItem> }
 
 								 // infinite scroll
-								 onEndReached={this.handleLoadMore}
-								 onEndReachedThreshold={0.5}
+								keyExtractor={ movieItem => movieItem.id }
+								onEndReached={this.handleLoadMore}
+								onEndReachedThreshold={0.5}
+								initialNumToRender={5}
 						 />
 					</Content>
 			</Container>
