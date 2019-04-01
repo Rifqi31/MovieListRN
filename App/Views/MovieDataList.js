@@ -13,6 +13,8 @@ import {
 	Right,
 	Left,
 	Icon,
+	Thumbnail,
+	Button,
 	List,
 	ListItem
 } from "native-base";
@@ -32,7 +34,7 @@ class MovieDataList extends React.PureComponent {
 			api_key : '9a4a662a126525b07d4b84b079d809d8',
 			language : 'en-US',
 			// optional param
-			sort_by : 'popularity.asc',
+			sort_by : 'popularity.desc',
 			include_adult_movie : false,
 			include_video : false,
 			page : 1,
@@ -43,7 +45,7 @@ class MovieDataList extends React.PureComponent {
 
 	}
 
-	componentDidMount =() => {
+	componentDidMount = () => {
 		this.makeRemoteRequest();
 	}
 
@@ -75,12 +77,23 @@ class MovieDataList extends React.PureComponent {
 	}
 
 
+	// _renderItemMovie = (movieItem) => {
+	// 	<ListItem thumbnail>
+	// 		<Left>
+	// 			<Thumbnail square source = {{ uri : movieItem.poster_path }} />
+	// 		</Left>
+	// 	</ListItem>
+	// }
 
 	render(){
 		return(
 			<Container>
 				<Header>
-					<Left />
+					<Left>
+						<Button transparent>
+                            <Icon name="menu" />
+                        </Button>
+					</Left>
 						<Body>
 							<Title>Movie List</Title>
 						</Body>
@@ -92,10 +105,19 @@ class MovieDataList extends React.PureComponent {
 							renderRow = { movieItem => 
 								<ListItem>
 									<Left>
-										<Text>{ movieItem.title }</Text>
+										{/* <Text>{ movieItem.poster_path }</Text> */}
+										<Thumbnail square large source= {{ uri:"https://image.tmdb.org/t/p/w500" + movieItem.poster_path }}/>
+										<Body>
+											<Text>{ movieItem.title }</Text>
+											<Text note >Release Date : { movieItem.release_date }</Text>
+											<Text note >Vote Avarage : { movieItem.vote_average }</Text>
+											<Text note >Language : { movieItem.original_language}</Text>
+										</Body>
 									</Left>
+										<Button transparent>
+											<Icon name="arrow-forward" style={{ color: "#999" }}/>
+										</Button>
 								</ListItem> }
-
 						 />
 					</Content>
 			</Container>
