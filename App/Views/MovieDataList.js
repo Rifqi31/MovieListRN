@@ -1,4 +1,5 @@
 import React from "react";
+import { FlatList } from "react-native";
 import {
 	// base component
 	Container,
@@ -15,7 +16,6 @@ import {
 	Icon,
 	Thumbnail,
 	Button,
-	List,
 	ListItem
 } from "native-base";
 
@@ -86,6 +86,25 @@ class MovieDataList extends React.PureComponent {
         });
 	}
 
+	renderItem = ({ item }) => {
+		return (
+			<ListItem Thumbnail>
+				<Left>
+					<Thumbnail square large source= {{ uri:"https://image.tmdb.org/t/p/w500" + item.poster_path }}/>
+						<Body>
+							<Text>{ item.title }</Text>
+							<Text note >Release Date : { item.release_date }</Text>
+							<Text note >Vote Avarage : { item.vote_average }</Text>
+							<Text note >Language : { item.original_language}</Text>
+						</Body>
+				</Left>
+				<Button transparent>
+					<Icon name="arrow-forward" style={{ color: "#999" }}/>
+				</Button>
+			</ListItem>
+		);
+	}
+
 	render(){
 		return(
 			<Container>
@@ -101,31 +120,11 @@ class MovieDataList extends React.PureComponent {
 					<Right />
 				</Header>
 					<Content>
-						<List
-							dataArray = { this.state.data }
-							renderRow = { movieItem => 
-								<ListItem Thumbnail>
-									<Left>
-										{/* <Text>{ movieItem.poster_path }</Text> */}
-										<Thumbnail square large source= {{ uri:"https://image.tmdb.org/t/p/w500" + movieItem.poster_path }}/>
-										<Body>
-											<Text>{ movieItem.title }</Text>
-											<Text note >Release Date : { movieItem.release_date }</Text>
-											<Text note >Vote Avarage : { movieItem.vote_average }</Text>
-											<Text note >Language : { movieItem.original_language}</Text>
-										</Body>
-									</Left>
-										<Button transparent>
-											<Icon name="arrow-forward" style={{ color: "#999" }}/>
-										</Button>
-								</ListItem> }
-
-								 // infinite scroll
-								keyExtractor={ movieItem => movieItem.id.toString() }
-								onEndReached={this.handleLoadMore}
-								onEndReachedThreshold={0.5}
-								initialNumToRender={5}
-						 />
+						<FlatList 
+							data = { this.state.data }
+							renderItem = { this.renderItem }
+							keyExtractor={ item => item.id.toString() }
+						/>
 					</Content>
 			</Container>
 		);
