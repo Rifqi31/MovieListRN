@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList } from "react-native";	// import Flatlist from react-native
 import {
 	// base component
 	Container,
@@ -18,6 +18,7 @@ import {
 	Button,
 	ListItem
 } from "native-base";
+import stylesWindow from "./Style";	// stylesheet
 
 class MovieDataList extends React.PureComponent {
 	// create constructor
@@ -45,10 +46,11 @@ class MovieDataList extends React.PureComponent {
 
 	}
 
+	// call the API function
 	componentDidMount = () => {
 		this.makeRemoteRequest();
 	}
-
+	// call the api url and manipulate it
 	makeRemoteRequest = () => {
 		const {
 			api_version,
@@ -86,29 +88,35 @@ class MovieDataList extends React.PureComponent {
         });
 	}
 
+	// render movie item
 	renderItem = ({ item }) => {
 		return (
 			<ListItem Thumbnail>
 				<Left>
-					<Thumbnail square large source= {{ uri:"https://image.tmdb.org/t/p/w500" + item.poster_path }}/>
+					<Thumbnail style = {{ height: 110, borderRadius: 30/2}} square large source= {{ uri:"https://image.tmdb.org/t/p/w185" + item.poster_path }}/>
 						<Body>
-							<Text>{ item.title }</Text>
-							<Text note >Release Date : { item.release_date }</Text>
-							<Text note >Vote Avarage : { item.vote_average }</Text>
-							<Text note >Language : { item.original_language}</Text>
+							<Text style = { stylesWindow.fontMainColor } >{ item.title }</Text>
+							<Text style = { stylesWindow.fontMainColor } note >Release Date : { item.release_date }</Text>
+							<Text style = { stylesWindow.fontMainColor } note >Vote Avarage : { item.vote_average }</Text>
+							<Text style = { stylesWindow.fontMainColor } note >Language : { item.original_language}</Text>
 						</Body>
 				</Left>
 				<Button transparent>
-					<Icon name="arrow-forward" style={{ color: "#999" }}/>
+					<Icon name="arrow-forward" style={ stylesWindow.arrowColor }/>
 				</Button>
 			</ListItem>
 		);
 	}
 
+	// main render
 	render(){
 		return(
 			<Container>
-				<Header>
+				<Header 
+					style = { stylesWindow.headerBackgroundColor }
+					androidStatusBarColor="#504F6D"
+                    iosBarStyle="light-content"
+				>
 					<Left>
 						<Button transparent>
                             <Icon name="menu" />
@@ -119,19 +127,28 @@ class MovieDataList extends React.PureComponent {
 						</Body>
 					<Right />
 				</Header>
-					<Content>
+					<Content style = {stylesWindow.ContentStyleColor}>
 						<FlatList 
 							data = { this.state.data }
+							// render per item
 							renderItem = { this.renderItem }
+							// key list
 							keyExtractor={ item => item.id.toString() }
+							 // infinite scroll
+							onEndReached={this.handleLoadMore}
+							onEndReachedThreshold={0.5}
+							// performence source https://github.com/filipemerker/flatlist-performance-tips
+							removeClippedSubviews={true}	// for memory friendly
+							maxToRenderPerBatch={5}			// for rendered per bacth
+							updateCellsBatchingPeriod={30}	// tells the amount of items rendered per batch in ms
+							initialNumToRender={3}			// This means the initial amount of items to render
+							windowSize={10}					// The number passed here is a measurement unit where 1 is equivalent to your viewport height
+
 						/>
 					</Content>
 			</Container>
 		);
 	}
-
-
-
 
 }
 
