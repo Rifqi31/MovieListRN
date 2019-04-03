@@ -2,11 +2,16 @@ import React from "react";
 import { Root } from "native-base";
 import {createDrawerNavigatior, createStackNavigator, createAppContainer} from "react-navigation";
 
-const DrawerNavigator = createDrawerNavigatior({
-
-})
+import MovieDataList from "../Views/MovieDataList";
+import MovieDetail from "../Views/MovieDetail";
 
 const StackNavigator = createStackNavigator({
+
+  MovieListData: { screen: MovieDataList}, // homePage
+  MovieListData_Detail: { screen: MovieDetail}
+},{
+  initialRouteName : "MovieListData",
+  headerMode : "none"
 
 })
 

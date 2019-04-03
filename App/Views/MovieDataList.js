@@ -91,20 +91,25 @@ class MovieDataList extends React.PureComponent {
 	// render movie item
 	renderItem = ({ item }) => {
 		return (
-			<ListItem Thumbnail>
-				<Left>
-					<Thumbnail style = {{ height: 110, borderRadius: 30/2}} square large source= {{ uri:"https://image.tmdb.org/t/p/w185" + item.poster_path }}/>
-						<Body>
-							<Text style = { stylesWindow.fontMainColor } >{ item.title }</Text>
-							<Text style = { stylesWindow.fontMainColor } note >Release Date : { item.release_date }</Text>
-							<Text style = { stylesWindow.fontMainColor } note >Vote Avarage : { item.vote_average }</Text>
-							<Text style = { stylesWindow.fontMainColor } note >Language : { item.original_language}</Text>
-						</Body>
-				</Left>
-				<Button transparent>
-					<Icon name="arrow-forward" style={ stylesWindow.arrowColor }/>
-				</Button>
-			</ListItem>
+			// touchable item
+				<ListItem 
+					Thumbnail
+					onPress={() => this.props.navigation.navigate(
+						"MovieListData_Detail", {
+							id: item.id
+						})}
+				>
+						<Left>
+							<Thumbnail style = {{ height: 120, borderRadius: 30/2}} square large source= {{ uri:"https://image.tmdb.org/t/p/w185" + item.poster_path }}/>
+								<Body>
+									<Text style = { stylesWindow.fontMainColor } >{ item.title }</Text>
+									<Text style = { stylesWindow.fontMainColor } note >Release Date : { item.release_date }</Text>
+									<Text style = { stylesWindow.fontMainColor } note >Vote Avarage : { item.vote_average }</Text>
+									<Text style = { stylesWindow.fontMainColor } note >Language : { item.original_language}</Text>
+								</Body>
+						</Left>
+							<Icon name="arrow-forward" style={ stylesWindow.iconColor }/>
+				</ListItem>
 		);
 	}
 
@@ -119,8 +124,8 @@ class MovieDataList extends React.PureComponent {
 				>
 					<Left>
 						<Button transparent>
-                            <Icon name="menu" />
-                        </Button>
+                        	<Icon name="menu" style={ stylesWindow.iconColor } />
+						</Button>
 					</Left>
 						<Body>
 							<Title>Movie List</Title>
@@ -143,7 +148,6 @@ class MovieDataList extends React.PureComponent {
 							updateCellsBatchingPeriod={30}	// tells the amount of items rendered per batch in ms
 							initialNumToRender={3}			// This means the initial amount of items to render
 							windowSize={10}					// The number passed here is a measurement unit where 1 is equivalent to your viewport height
-
 						/>
 					</Content>
 			</Container>

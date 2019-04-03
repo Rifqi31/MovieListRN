@@ -8,7 +8,7 @@ export default {
     fontMainColor : {
         color : "#DBD2E3"
     },
-    arrowColor : {
+    iconColor : {
         color : "#E3E2EA"
     }
 };
