@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";	// import Flatlist from react-native
+import { FlatList } from "react-native";
 import {
     // base component
     Container,
@@ -24,11 +24,12 @@ class MovieDetail extends React.PureComponent {
     
     // // create constructor
 	constructor(props){
-		super(props);
-
+        super(props);
+        // initiate param or trigger from another page
+        const item = this.props.navigation.state.params
 		// default statement
 		this.state = {
-			loading : false,
+			loading : true,
 			data : [],
 			// depends on API
 			// using API TmDB API
@@ -36,23 +37,18 @@ class MovieDetail extends React.PureComponent {
 			api_key : '9a4a662a126525b07d4b84b079d809d8',
 			language : 'en-US',
 			// optional param
-            movie_id : 0,
+            movie_id : item.id,
 			//
 			error : null,
 			refreshing : false
 		};
     }
 
-    // // call the API function    
+    // call the API function
 	componentDidMount = () => {
-        const item = this.props.navigation.state.params;
-        this.setState({
-            movie_id : item.id
-        }, () => {
-            this.makeRemoteRequest();
-        })
+		this.makeRemoteRequest();
     }
-	
+
     // call the api url and manipulate it
 	makeRemoteRequest = () => {
 		const {
@@ -62,18 +58,17 @@ class MovieDetail extends React.PureComponent {
 			language
 		} = this.state
 		const url = `https://api.themoviedb.org/${api_version}/movie/${movie_id}?api_key=${api_key}&language=${language}`;
-        this.setState({ loading : true })
-		fetch(url)
+        this.setState({ loading : false })
+        fetch(url)
         .then(response => response.json())
 		.then(response => {
             this.setState({
                 // depends on json structure if there is no results field use response only
-                data: [response],
+                data: response,
                 error: response.error || null,
                 loading: false,
                 // refreshing: false
             });
-            console.warn(this.state.data)
         })
        
         .catch(error => {
@@ -83,6 +78,7 @@ class MovieDetail extends React.PureComponent {
 
     // render movie item
     render(){
+        console.log(this.state.data)
         return(
             <Container>
                 <Header
@@ -96,10 +92,11 @@ class MovieDetail extends React.PureComponent {
                         </Button>
 					</Left>
 						<Body>
+                            <Title>Movie Detail</Title>
 						</Body>
 					<Right />
                 </Header>
-                    <Content style = {stylesWindow.ContentStyleColor}>
+                    <Content style = {stylesWindow.ContentStyleColor} padder>
                     </Content>
             </Container>
         );
